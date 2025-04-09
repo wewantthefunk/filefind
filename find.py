@@ -134,4 +134,5 @@ def get_occurrences(string, substring):
     return positions
 
 if __name__ == "__main__":
+    print("Searching ...")
     main()
