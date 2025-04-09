@@ -87,7 +87,7 @@ def main():
         print("Please provide a filename as a command-line argument.")
         return
 
-    target_filename = sys.argv[1]
+    target_filename = str(sys.argv[1]).lower()
     if target_filename.startswith("*") and target_filename.endswith("*"):
         target_filename = target_filename[1:len(target_filename) - 1]
         found_file = search_contains(file_list, target_filename)
@@ -95,14 +95,23 @@ def main():
         target_filename = target_filename[0:len(target_filename) - 1]
         found_file = binary_search_startswith(file_list, target_filename)
     elif target_filename.startswith("*"):
-        target_filename = target_filename[1:][::-1]
-        found_file = binary_search_startswith(rev_file_list, target_filename)
+        target_filename = target_filename[1:]
+        rev_target_filename = target_filename[1:][::-1]
+        found_file = binary_search_startswith(rev_file_list, rev_target_filename)        
     else:
         found_file = binary_search(file_list, target_filename)
 
     for f in found_file:
         if f is not None:
-            print(f"{f.folder_location}/{f.filename}")
+            print(f"{f.folder_location}/", end='')
+            starts = get_occurrences(f.filename.lower(), target_filename)
+            start = 0
+            for index in starts:
+                print(f.filename[start: index], end="")
+                print("\033[91m" + f.filename[index:index+len(target_filename)] + "\033[00m", end='')
+                start = start + index + len(target_filename)
+
+            print(f.filename[start:])
         else:
             print("File not found.")
 
@@ -111,6 +120,18 @@ def main():
         print("0 files found.")
     else:
         print(f"{len(found_file)} files found.")
+
+def get_occurrences(string, substring):
+    positions = []
+    start = 0
+    while True:
+        start = string.find(substring, start)
+        if start == -1:
+            break
+        positions.append(start)
+        start += len(substring)
+
+    return positions
 
 if __name__ == "__main__":
     main()

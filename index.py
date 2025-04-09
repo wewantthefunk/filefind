@@ -27,7 +27,7 @@ def main():
     for folder in folders:
         for root, dirs, files in os.walk(folder):
             for filename in files:
-                file_data = FileData(filename, filename, root)
+                file_data = FileData(filename.lower(), filename, root)
                 file_list.append(file_data)
                 rev_file_data = FileData(filename[::-1], filename, root)
                 rev_file_list.append(rev_file_data)
