@@ -88,6 +88,17 @@ def main():
         return
 
     target_filename = str(sys.argv[1]).lower()
+    found_file = []
+    if target_filename == "--info":
+        print(f"\n{len(file_list)} total indexed files\n\nFolders Indexed:")
+        with open('list.idx', 'r', newline='') as idxfile:
+            lines = idxfile.readlines()
+            for line in lines:
+                print(line.replace("\n", ""))
+
+        exit(0)
+    
+    print("Searching ...")
     if target_filename.startswith("*") and target_filename.endswith("*"):
         target_filename = target_filename[1:len(target_filename) - 1]
         found_file = search_contains(file_list, target_filename)
@@ -134,5 +145,4 @@ def get_occurrences(string, substring):
     return positions
 
 if __name__ == "__main__":
-    print("Searching ...")
     main()
