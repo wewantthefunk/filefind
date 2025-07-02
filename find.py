@@ -7,20 +7,6 @@ class FileData:
         self.filename = filename
         self.folder_location = folder_location
 
-def binary_search(files, target):
-    low = 0
-    high = len(files) - 1
-
-    while low <= high:
-        mid = (low + high) // 2
-        if files[mid].filename == target:
-            return [files[mid]]
-        elif files[mid].filename < target:
-            low = mid + 1
-        else:
-            high = mid - 1
-    return [None]
-
 def binary_search_startswith(files, target):
     low = 0
     high = len(files) - 1
@@ -110,19 +96,19 @@ def main():
         rev_target_filename = target_filename[1:][::-1]
         found_file = binary_search_startswith(rev_file_list, rev_target_filename)        
     else:
-        found_file = binary_search(file_list, target_filename)
+        found_file = binary_search_startswith(file_list, target_filename)
 
     for f in found_file:
         if f is not None:
-            print(f"{f.folder_location}/", end='')
+            print(f"{f.folder_location.replace("\\", "/")}/", end='')
             starts = get_occurrences(f.filename.lower(), target_filename)
             start = 0
             for index in starts:
-                print(f.filename[start: index], end="")
-                print("\033[91m" + f.filename[index:index+len(target_filename)] + "\033[00m", end='')
+                print(f.filename[start: index].replace("\\", "/"), end="")
+                print("\033[91m" + f.filename[index:index+len(target_filename)].replace("\\", "/") + "\033[00m", end='')
                 start = start + index + len(target_filename)
 
-            print(f.filename[start:])
+            print(f.filename[start:].replace("\\", "/"))
         else:
             print("File not found.")
 
