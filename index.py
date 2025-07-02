@@ -27,6 +27,7 @@ def main():
     for folder in folders:
         for root, dirs, files in os.walk(folder):
             for filename in files:
+                filename = filename.strip().replace('\u202f', '')
                 file_data = FileData(filename.lower(), filename, root)
                 file_list.append(file_data)
                 rev_file_data = FileData(filename[::-1], filename, root)
